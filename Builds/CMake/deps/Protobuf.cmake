@@ -26,6 +26,7 @@ if (local_protobuf OR NOT Protobuf_FOUND)
   ExternalProject_Add (protobuf_src
     PREFIX ${nih_cache_path}
     SOURCE_DIR ${nih_src_path}/protobuf
+    STAMP_DIR ${nih_stamp_path}/protobuf
     GIT_REPOSITORY https://github.com/protocolbuffers/protobuf.git
     GIT_TAG v3.8.0
     SOURCE_SUBDIR cmake
