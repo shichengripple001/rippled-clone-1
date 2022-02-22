@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   check:
-    runs-on: self-built-runner-1
+    runs-on: self-built-ubuntu
     env:
       CLANG_VERSION: 10
     steps:
