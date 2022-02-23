@@ -189,7 +189,7 @@ jobs:
   linux_everything_else:
     name: Linux ${{ matrix.compiler.CC }}, ${{ matrix.BUILD_TYPE }}, unity ${{ matrix.unity }}, ${{ matrix.name }}
     needs: linux_cache
-    runs-on: ubuntu-18.04
+    runs-on: self-built-ubuntu
     timeout-minutes: 720
     strategy:
       fail-fast: false
@@ -203,35 +203,35 @@ jobs:
             # always work
             CC: 'gcc-8'
             CXX: 'g++-8'
-            image_user: "rippleci"
-            image_name: "rippled-ci-builder"
-            image_tag: "2020-01-08"
+            image_user: "registry.gitlab.com/shichengsg001"
+            image_name: "demo"
+            image_tag: "ubuntu_rippled_build"
 
           - CC: 'gcc-9'
             CXX: 'g++-9'
-            image_user: "rippleci"
-            image_name: "rippled-ci-builder"
-            image_tag: "2020-01-08"
+            image_user: "registry.gitlab.com/shichengsg001"
+            image_name: "demo"
+            image_tag: "ubuntu_rippled_build"
 
           - CC: 'clang-8'
             CXX: 'clang++-8'
-            image_user: "rippleci"
-            image_name: "rippled-ci-builder"
-            image_tag: "2020-01-08"
+            image_user: "registry.gitlab.com/shichengsg001"
+            image_name: "demo"
+            image_tag: "ubuntu_rippled_build"
 
           - CC: 'clang-9'
             CXX: 'clang++-9'
-            image_user: "rippleci"
-            image_name: "rippled-ci-builder"
-            image_tag: "2020-01-08"
+            image_user: "registry.gitlab.com/shichengsg001"
+            image_name: "demo"
+            image_tag: "ubuntu_rippled_build"
 
-          - # The 2020-01-08 image doesn't have clang-10
-            CC: 'clang-10'
-            CXX: 'clang++-10'
-            image_user: "rippleci"
-            image_name: "rippled-ci-builder"
-            image_tag: "2944b78d22db"
-            CMAKE_ADD: " -DBoost_NO_BOOST_CMAKE=ON"
+#          - # The 2020-01-08 image doesn't have clang-10
+#            CC: 'clang-10'
+#            CXX: 'clang++-10'
+#            image_user: "registry.gitlab.com/shichengsg001"
+#            image_name: "demo"
+#            image_tag: "ubuntu_rippled_build"
+#            CMAKE_ADD: " -DBoost_NO_BOOST_CMAKE=ON"
 
         BUILD_TYPE: [ "Debug", "Release" ]
         unity: [ "OFF", "ON" ]
