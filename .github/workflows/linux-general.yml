@@ -257,6 +257,7 @@ jobs:
 
     container:
       image: "${{ matrix.compiler.image_user }}/${{ matrix.compiler.image_name }}:${{ matrix.compiler.image_tag }}"
+      options: -v /work-2:/tmp/:rw
     env:
       CC: ${{ matrix.compiler.CC }}
       CXX: ${{ matrix.compiler.CXX }}
