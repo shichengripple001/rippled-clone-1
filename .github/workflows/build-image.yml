@@ -23,4 +23,4 @@ jobs:
         cd Builds/containers/
         docker build -t registry.gitlab.com/shichengsg001/demo:ubuntu_rippled_build --build-arg CI_USE=true . -f ubuntu-builder/Dockerfile
     - name: Push
-      run: docker push -t registry.gitlab.com/shichengsg001/demo:ubuntu_rippled_build
+      run: docker push registry.gitlab.com/shichengsg001/demo:ubuntu_rippled_build
