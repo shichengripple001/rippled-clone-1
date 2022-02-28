@@ -1,0 +1,26 @@
+name: clang-format
+
+on: [workflow_dispatch]
+
+jobs:
+  build-image:
+    runs-on: self-built-ubuntu
+    env:
+      CLANG_VERSION: 10
+    steps:
+    - uses: actions/checkout@v2
+#    - name: Install clang-format
+#      run: |
+#        sudo tee /etc/apt/sources.list.d/llvm.list >/dev/null <<EOF
+#        deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-${CLANG_VERSION} main
+#        deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-${CLANG_VERSION} main
+#        EOF
+#        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add
+#        sudo apt-get update
+#        sudo apt-get install clang-format-${CLANG_VERSION}
+    - name: Build
+      run: |
+        
+        docker build -t registry.gitlab.com/shichengsg001/demo:ubuntu_rippled_build --build-arg CI_USE=true . -f ubuntu-builder/Dockerfile
+    - name: Push
+      run: docker push -t registry.gitlab.com/shichengsg001/demo:ubuntu_rippled_build
