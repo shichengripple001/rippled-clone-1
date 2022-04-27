@@ -40,16 +40,16 @@ jobs:
         compiler:
 #          - image_user: "rippleci"
 #            image_name: "rippled-ci-builder"
-          - image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build"
+          - image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clanglessthan10"
             CC: gcc-9
             CXX: g++-9
 #            runner: self-built-runner
 
-          - image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build_c10"
+          - image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clang10"
             CC: clang-10
             CXX: clang++-10
             CMAKE_ADD: " -DBoost_NO_BOOST_CMAKE=ON"
@@ -203,34 +203,34 @@ jobs:
             # always work
             CC: 'gcc-8'
             CXX: 'g++-8'
-            image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build"
+            image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clanglessthan10"
 
           - CC: 'gcc-9'
             CXX: 'g++-9'
-            image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build"
+            image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clanglessthan10"
 
           - CC: 'clang-8'
             CXX: 'clang++-8'
-            image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build"
+            image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clanglessthan10"
 
           - CC: 'clang-9'
             CXX: 'clang++-9'
-            image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build"
+            image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clanglessthan10"
 
           - # The 2020-01-08 image doesn't have clang-10
             CC: 'clang-10'
             CXX: 'clang++-10'
-            image_user: "registry.gitlab.com/shichengsg001"
-            image_name: "demo"
-            image_tag: "ubuntu_rippled_build_c10"
+            image_user: "rippleautomation"
+            image_name: "rippled-ci-builder"
+            image_tag: "clang10"
             CMAKE_ADD: " -DBoost_NO_BOOST_CMAKE=ON"
 
         BUILD_TYPE: [ "Debug", "Release" ]
