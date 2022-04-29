@@ -11,5 +11,6 @@ jobs:
         shell: bash
         run: |
           echo "PATH: $PATH"
+          vcpkg --version
           whoami
           cmake --version
