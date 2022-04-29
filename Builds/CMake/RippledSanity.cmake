@@ -39,14 +39,14 @@ endif ()
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang") # both Clang and AppleClang
   set (is_clang TRUE)
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND
-         CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-    message (FATAL_ERROR "This project requires clang 7 or later")
+         CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
+    message (FATAL_ERROR "This project requires clang 8 or later")
   endif ()
   # TODO min AppleClang version check ?
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set (is_gcc TRUE)
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-    message (FATAL_ERROR "This project requires GCC 7 or later")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
+    message (FATAL_ERROR "This project requires GCC 8 or later")
   endif ()
 endif ()
 if (CMAKE_GENERATOR STREQUAL "Xcode")
@@ -72,11 +72,14 @@ if ("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     "directory from ${CMAKE_CURRENT_SOURCE_DIR} and try building in a separate directory.")
 endif ()
 
-if ("${CMAKE_GENERATOR}" MATCHES "Visual Studio" AND
-    NOT ("${CMAKE_GENERATOR}" MATCHES .*Win64.*))
-  message (FATAL_ERROR
-    "Visual Studio 32-bit build is not supported. Use -G\"${CMAKE_GENERATOR} Win64\"")
-endif ()
+if("${CMAKE_GENERATOR}" MATCHES "Visual Studio" AND
+    NOT("${CMAKE_GENERATOR}" MATCHES .*Win64.*) AND
+    NOT("${CMAKE_GENERATOR_PLATFORM}" MATCHES .*x64.*))
+  message(FATAL_ERROR
+    "Visual Studio 32-bit build is not supported. Use -G\"${CMAKE_GENERATOR}\" -Ax64. "
+    "See https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html#visual-studio-generators "
+    "for more information.")
+endif()
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
   message (FATAL_ERROR "Rippled requires a 64 bit target architecture.\n"

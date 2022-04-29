@@ -120,11 +120,7 @@ add_library (Ripple::xrpl_core ALIAS xrpl_core)
 target_include_directories (xrpl_core
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ripple>
-    # this one is for beast/legacy files:
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/beast/extras>
     $<INSTALL_INTERFACE:include>)
-
 
 target_compile_definitions(xrpl_core
   PUBLIC
@@ -295,23 +291,23 @@ install (
 if (tests)
   install (
     FILES
-      src/beast/extras/beast/unit_test/amount.hpp
-      src/beast/extras/beast/unit_test/dstream.hpp
-      src/beast/extras/beast/unit_test/global_suites.hpp
-      src/beast/extras/beast/unit_test/match.hpp
-      src/beast/extras/beast/unit_test/recorder.hpp
-      src/beast/extras/beast/unit_test/reporter.hpp
-      src/beast/extras/beast/unit_test/results.hpp
-      src/beast/extras/beast/unit_test/runner.hpp
-      src/beast/extras/beast/unit_test/suite.hpp
-      src/beast/extras/beast/unit_test/suite_info.hpp
-      src/beast/extras/beast/unit_test/suite_list.hpp
-      src/beast/extras/beast/unit_test/thread.hpp
-    DESTINATION include/beast/unit_test)
+      src/ripple/beast/unit_test/amount.hpp
+      src/ripple/beast/unit_test/dstream.hpp
+      src/ripple/beast/unit_test/global_suites.hpp
+      src/ripple/beast/unit_test/match.hpp
+      src/ripple/beast/unit_test/recorder.hpp
+      src/ripple/beast/unit_test/reporter.hpp
+      src/ripple/beast/unit_test/results.hpp
+      src/ripple/beast/unit_test/runner.hpp
+      src/ripple/beast/unit_test/suite.hpp
+      src/ripple/beast/unit_test/suite_info.hpp
+      src/ripple/beast/unit_test/suite_list.hpp
+      src/ripple/beast/unit_test/thread.hpp
+    DESTINATION include/ripple/beast/extras/unit_test)
   install (
     FILES
-      src/beast/extras/beast/unit_test/detail/const_container.hpp
-    DESTINATION include/beast/unit_test/detail)
+      src/ripple/beast/unit_test/detail/const_container.hpp
+    DESTINATION include/ripple/beast/unit_test/detail)
 endif () #tests
 #[===================================================================[
    rippled executable
@@ -442,7 +438,6 @@ target_sources (rippled PRIVATE
   #]===============================]
   src/ripple/basics/impl/Archive.cpp
   src/ripple/basics/impl/BasicConfig.cpp
-  src/ripple/basics/impl/PerfLogImp.cpp
   src/ripple/basics/impl/ResolverAsio.cpp
   src/ripple/basics/impl/UptimeClock.cpp
   src/ripple/basics/impl/make_SSLContext.cpp
@@ -640,6 +635,11 @@ target_sources (rippled PRIVATE
   src/ripple/rpc/impl/ShardVerificationScheduler.cpp
   src/ripple/rpc/impl/Status.cpp
   src/ripple/rpc/impl/TransactionSign.cpp
+  #[===============================[
+     main sources:
+       subdir: perflog
+  #]===============================]
+  src/ripple/perflog/impl/PerfLogImp.cpp
 
   #[===============================[
      main sources:
@@ -993,13 +993,34 @@ if (reporting)
     target_compile_definitions(rippled PRIVATE RIPPLED_REPORTING)
 endif ()
 
-if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
+if (ci_tests)
+    target_compile_definitions(rippled PRIVATE RIPPLED_CI_TESTS)
+endif ()
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.16)
   # any files that don't play well with unity should be added here
   if (tests)
     set_source_files_properties(
       # these two seem to produce conflicts in beast teardown template methods
       src/test/rpc/ValidatorRPC_test.cpp
       src/test/rpc/ShardArchiveHandler_test.cpp
+      # These files cause OOM under some configurations
+      src/test/server/ServerStatus_test.cpp
+      src/test/basics/Buffer_test.cpp
+      src/test/protocol/SecretKey_test.cpp
+      src/test/rpc/RPCCall_test.cpp
+      src/test/nodestore/DatabaseShard_test.cpp
+      src/test/rpc/Tx_test.cpp
       PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE)
   endif () #tests
 endif ()
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.11 AND NOT MSVC)
+  if(tests)
+    # MSVC has no problem with self-assignment, but does have a
+    # problem with this compile flag in some configs.
+    set_source_files_properties(
+        # This file intentionally tests self-assignments
+        src/test/basics/Buffer_test.cpp
+        PROPERTIES COMPILE_OPTIONS -Wno-self-assign-overloaded)
+  endif () #tests
+endif()
