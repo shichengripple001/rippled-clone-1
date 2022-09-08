@@ -1,0 +1,16 @@
+name: "test"
+on: [push, pull_request]
+
+jobs:
+  windows_cache:
+    name: Seed windows cache
+    runs-on: windows-runner
+    timeout-minutes: 720
+    steps:
+      - name: Bash
+        shell: bash
+        run: |
+          echo "PATH: $PATH"
+          vcpkg --version
+          whoami
+          cmake --version

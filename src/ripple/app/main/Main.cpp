@@ -35,7 +35,7 @@
 #include <ripple/rpc/RPCHandler.h>
 
 #ifdef ENABLE_TESTS
-#include <beast/unit_test/match.hpp>
+#include <ripple/beast/unit_test/match.hpp>
 #include <test/unit_test/multi_runner.h>
 #endif  // ENABLE_TESTS
 
@@ -798,8 +798,6 @@ main(int argc, char** argv)
 #endif
     }
 #endif
-
-    atexit(&google::protobuf::ShutdownProtobufLibrary);
 
     return ripple::run(argc, argv);
 }
